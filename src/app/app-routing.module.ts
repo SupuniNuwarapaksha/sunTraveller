@@ -1,0 +1,19 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { CancelReservationComponent } from './components/cancel-reservation/cancel-reservation.component';
+import { CreateContractComponent } from './components/create-contract/create-contract.component';
+import { HomeComponent } from './components/home/home.component';
+import { SearchReservationComponent } from './components/search-reservation/search-reservation.component';
+
+const routes: Routes = [
+  { path: 'create', component: CreateContractComponent },
+  { path: '', component: HomeComponent },
+  { path: 'search-reservations', component: SearchReservationComponent },
+  { path: 'cancel-reservations', component: CancelReservationComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

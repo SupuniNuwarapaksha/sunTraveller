@@ -1,0 +1,93 @@
+
+<div class="container-fluid bg-3 text-center">    
+  <div class="row">
+      <div class="card my-5">
+          <div class="card-body">
+            <h4>Hotel: {{ contract?.hotel?.name}}</h4>
+            <h5>Available Rooms</h5>
+            <table class="table table-bordered table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Room Type</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Max Adults</th>
+                  <th scope="col">No of Available Rooms</th>
+                  <th>Enter Wanted Number of Rooms</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let roomType of contract.roomTypes">
+                  <td>{{roomType.type}}</td>
+                  <td>{{roomType.price}}</td>
+                  <td>{{roomType.capacity}}</td>
+                  <td>{{roomType.remainingNumberOfRooms}}</td>
+                  <td><input type="number" class="form-control" id="price" name="price"
+                    required ngModel min="0" value="0" max="{{roomType.remainingNumberOfRooms}}"
+                    (input)="changeValue($event, roomType)"></td>
+                </tr>
+              </tbody>
+            </table>
+            <h5>{{calculatedPrice}}</h5>
+            <button class="btn btn-dark" (click)="reserveRooms()">Reserve</button>
+          </div>
+        </div>
+  </div>
+</div>
+
+<div class="card my-5" *ngIf="reservedClicked">
+  <div class="card-body">
+    <h1>Enter Customer Details</h1>
+    <form [formGroup]="customerForm">
+      <div class="row">
+          <div class="form-group col-md-6">
+          <label for="contactNumber">Existing Customer? Identity Card Number</label>
+          <input type="text" formControlName="existingIdNumber"
+            class="form-control" 
+            id="existingIdNumber" 
+            name="existingIdNumber" 
+            required=>
+        </div>
+      <div class="form-group col-md-2"><button class="btn btn-info" (click)="searchCustomer()">{{existingCustomer ? "Clear" : "Search"}}</button></div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="name">Name</label>
+          <input type="text" formControlName="name"
+            class="form-control" 
+            id="name" 
+            name="name" 
+            required >
+        </div>
+  
+        <div class="form-group col-md-6">
+            <label for="contactNumber">Identity Card Number</label>
+            <input type="text" formControlName="idNumber"
+              class="form-control" 
+              id="idNumber" 
+              name="idNumber" 
+              required=>
+          </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="contactNumber">Contact Number</label>
+          <input type="text" formControlName="contactNumber"
+            class="form-control" 
+            id="contactNumber" 
+            name="contactNumber" 
+            required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="Address">Address</label>
+          <input type="text" formControlName="address"
+            class="form-control" 
+            id="address" 
+            name="address" 
+            required=>
+        </div>
+      </div>
+      <button type="submit"  [disabled]="!customerForm.valid"
+        class="btn btn-info" (click)="onSubmit()">Submit Reservation</button>
+    </form>
+  </div>
+</div>

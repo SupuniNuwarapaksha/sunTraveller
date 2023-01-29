@@ -1,0 +1,103 @@
+<div class="card my-5">
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()" [formGroup]="reservationSearchForm">
+        <div class="form-group">
+          <label for="checkInDate">Start Date</label>
+          <input type="date" formControlName="checkInDate"
+            class="form-control" 
+            id="checkInDate" 
+            name="checkInDate" 
+            required >
+        </div>
+
+        <div class="form-group">
+            <label for="numberOfNights">No of Nights</label>
+            <input type="number" formControlName="numberOfNights"
+              class="form-control" 
+              id="numberOfNights" 
+              name="numberOfNights" 
+              required min="1">
+          </div>
+
+          <div formArrayName="roomCount">
+            <div>
+            </div>
+            <h4>Add Room Details</h4>
+
+            <form #addRommType="ngForm" (ngSubmit)="onAdd(addRommType)" class="form-horizontal row gx-5">
+              <div class="col-sm-2 ml-2">
+                <label>No of Adults</label>
+                <input type="number" class="form-control" id="numberOfAdults" name="numberOfAdults"
+                  required ngModel min="1">
+              </div>
+              <div class="col-sm-2 ml-2">
+                <label>No of Rooms</label>
+                <input type="number" class="form-control" id="numberOfBeds" name="numberOfBeds"
+                  required ngModel min="1">
+              </div>
+              <div class="col-sm-1" style="margin-top: 24px;">
+                <button class="btn btn-primary mb-2 mt-6" type="submit" [disabled]="addRommType.invalid">Add Room Details</button>
+              </div>
+            </form>
+
+            <table class="table table-striped mt-4 w-75">
+              <thead>
+                <tr>
+                  <th>No of Adults</th>
+                  <th>No of Rooms</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="form-group" *ngFor="let room of roomTypeList; let i = index;">
+                  <td>{{room.numberOfAdults}}</td>
+                  <td>{{room.numberOfBeds}}</td>
+                  <td><button class="btn btn-secondary" type="button" (click)="deleteControl(i)">Delete</button></td>
+                  <div class="alert alert-danger" *ngIf="room.invalid 
+                              && room.touched">
+                    Please enter value
+                  </div>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        <button type="submit"  [disabled]="!reservationSearchForm.valid"
+          class="btn btn-info">Submit</button>
+      </form>
+    </div>
+  </div>
+  
+  <div class="container-fluid bg-3 text-center">    
+    <div class="row">
+
+      <div class="col-sm-3" *ngFor="let contract of availableContracts; let i = index">
+        <div class="card my-5">
+            <div class="card-body">
+              <h4>Hotel: {{ contract?.hotel?.name}}</h4>
+              <h5>Available Rooms</h5>
+              <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Room Type</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">No of Available Rooms</th>
+                    <th scope="col">Max Adults</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let roomType of contract.roomTypes">
+                    <td>{{roomType.type}}</td>
+                    <td>{{roomType.price}}</td>
+                    <td>{{roomType.remainingNumberOfRooms}}</td>
+                    <td>{{roomType.capacity}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5>{{contract.minimumPrice}}</h5>
+              <button class="btn btn-dark" (click)="openDialog(contract)">Submit</button>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
