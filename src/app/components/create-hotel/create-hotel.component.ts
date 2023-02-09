@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormArray, NgForm } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomerService } from 'src/app/services/customer.service';
 import { HotelService } from 'src/app/services/hotel.service';
 
@@ -20,6 +21,7 @@ export class CreateHotelComponent {
   constructor(
     private hotelService: HotelService,
     private customerService: CustomerService,
+    private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<CreateHotelComponent>) {
     this.hotelForm = new FormGroup({
       id: new FormControl(''),
@@ -37,6 +39,8 @@ export class CreateHotelComponent {
         result => {
           this.createdHotel;
           this.submit = true;
+          this.dialogRef.close();
+          this.snackBar.open("Hotel created successfully!", "Ok", {duration: 3000})
         }
         );
   }

@@ -1,65 +1,79 @@
-
-<div class="card my-5">
-    <div class="card-body">
-      <form [formGroup]="hotelForm">
-        <div class="row">
+<div class="card my-6">
+  <div class="card-body">
+    <form [formGroup]="hotelForm">
+      <div class="row">
         <div class="form-group col-md-6">
           <label for="markup">Name</label>
-          <input type="text" formControlName="name"
-            class="form-control" 
-            id="name" 
-            name="name" 
+          <input
+            type="text"
+            formControlName="name"
+            class="form-control"
+            id="name"
+            name="name"
             placeholder="Enter a hotel name"
-            required>
-            <div *ngIf="hotelForm.get('name').invalid && submitted" class="alert alert-danger">
-                Please enter a hotel Name
-              </div>
+            required
+          />
+          <div *ngIf="hotelForm.get('name').invalid && (hotelForm.get('name').dirty || 
+          hotelForm.get('name').touched)" class="alert alert-danger">
+            Please enter a name
+          </div>
         </div>
         <div class="form-group col-md-6">
           <label for="markup">Location</label>
-          <input type="text" formControlName="location"
-            class="form-control" 
-            id="location" 
-            name="location" 
+          <input
+            type="text"
+            formControlName="location"
+            class="form-control"
+            id="location"
+            name="location"
             placeholder="Enter location details"
-            required>
-            <div *ngIf="hotelForm.get('location').invalid && submitted" class="alert alert-danger">
-                Please enter a location
-              </div>
-        </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label for="markup">Hotel Contact Number</label>
-            <input type="text" formControlName="contactNumber"
-              class="form-control" 
-              id="contactNumber" 
-              name="contactNumber" 
-              placeholder="Enter location details"
-              required>
-              <div *ngIf="hotelForm.get('contactNumber').invalid && submitted" class="alert alert-danger">
-                  Please enter a location
-                </div>
-          </div>
-          <div class="form-group col-md-6">
-            <label for="markup">Contact Person Name</label>
-            <input type="text" formControlName="contactName"
-              class="form-control" 
-              id="contactName" 
-              name="contactName" 
-              placeholder="Enter location details"
-              required>
-              <div *ngIf="hotelForm.get('contactName').invalid && submitted" class="alert alert-danger">
-                  Please enter a location
-                </div>
+            required
+          />
+          <div *ngIf="hotelForm.get('location').invalid && (hotelForm.get('location').dirty || 
+          hotelForm.get('location').touched)" class="alert alert-danger">
+            Please enter the location
           </div>
         </div>
-        <div class="alert alert-success" role="alert" *ngIf="submit">
-            This is a success alert—check it out!
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="markup">Hotel Contact Number</label>
+          <input
+            type="text"
+            formControlName="contactNumber"
+            class="form-control"
+            id="contactNumber"
+            name="contactNumber"
+            placeholder="Enter location details"
+            required
+          />
+          <div *ngIf="hotelForm.get('contactNumber').invalid && (hotelForm.get('contactNumber').dirty || 
+          hotelForm.get('contactNumber').touched)" class="alert alert-danger">
+            Please enter a contactNumber
           </div>
-        <button type="submit"  [disabled]="!hotelForm.valid" *ngIf="!submit"
-          class="btn btn-info" (click)="onSubmit()">Create Hotel</button>
-          <button class="btn btn-secondary" (click)="closeDialog()">Close</button>
-      </form>
-    </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="markup">Contact Person Name</label>
+          <input
+            type="text"
+            formControlName="contactName"
+            class="form-control"
+            id="contactName"
+            name="contactName"
+            placeholder="Enter location details"
+          />
+        </div>
+      </div>
+      <button
+        type="submit"
+        [disabled]="!hotelForm.valid"
+        *ngIf="!submit"
+        class="btn btn-info float-right" style="margin-left: 10px;"
+        (click)="onSubmit()"
+      >
+        Create Hotel
+      </button>
+      <button class="btn btn-secondary float-right" (click)="closeDialog()">Close</button>
+    </form>
   </div>
+</div>

@@ -1,13 +1,14 @@
-<div class="card my-5">
+<div class="card my-5" style="margin: 5px;">
   <div class="card-body">
-    <form [formGroup]="contractForm">
+    <h2>{{isUpdate ? "Update" : "Create"}} Contract</h2>
+    <form [formGroup]="contractForm" style="margin-left: 5px;">
       <div class="row">
-        <div class="form-group col-md-6">
+        <div class="form-group col">
           <label for="hotelId">Hotel</label>
           <select class="custom-select mb-3" formControlName="hotelId" required>
-            <option value="" disabled>Choose City</option>
+            <option value="" disabled>Choose Hotel</option>
             <option *ngFor="let hotel of hotels" [ngValue]="hotel.id">
-              {{ hotel.name }}
+              {{ hotel.name }} - {{hotel.location}}
             </option>
           </select>
           <div *ngIf="contractForm.get('hotelId').invalid && (contractForm.get('hotelId').dirty || 
@@ -15,14 +16,14 @@
             Please select a hotel from the dropdown
           </div>
         </div>
-        <div class="col-sm-1" style="margin-top: 24px;">
-          <button class="btn btn-primary mb-2 mt-6" data-toggle="modal" data-target="#myModal">Create a New
+        <div class="col " style="margin-top: 29px;">
+          <button class="btn btn-primary float-right " (click)="openDialog()">Create a New
             Hotel</button>
         </div>
       </div>
       <div class="row">
-        <div class="form-group col-md-6">
-          <label for="markup">Markup</label>
+        <div class="form-group col-md-4">
+          <label for="markup">Markup (%)</label>
           <input type="number" formControlName="markup" class="form-control" id="markup" name="markup"
             placeholder="Enter markup" required min="0">
           <div *ngIf="contractForm.get('markup').invalid && (contractForm.get('markup').dirty || 
@@ -30,28 +31,29 @@
             Please enter a valid markup
           </div>
         </div>
-      </div>
-      <div class="row">
-        <!-- <div  class="alert alert-danger">Name is required</div> -->
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label for="startDate">Start Date</label>
           <input type="date" formControlName="startDate" class="form-control" id="startDate" name="startDate" required
-            min="minDate">
+          [min]="now" (input)="changeEndDateMin($event)">
           <div *ngIf="contractForm.get('startDate').invalid && (contractForm.get('startDate').dirty || 
               contractForm.get('startDate').touched)" class="alert alert-danger">
             Please provide a valid start date.
           </div>
-          <!-- <div  class="alert alert-danger">Email is required</div> -->
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label for="endDate">End Date</label>
-          <input type="date" formControlName="endDate" class="form-control" id="endDate" name="endDate" required>
+          <input type="date" formControlName="endDate" class="form-control" id="endDate" name="endDate" 
+          [readOnly]="contractForm.get('startDate').value === ''" [min]="endDateMIn" required>
           <div *ngIf="contractForm.get('endDate').invalid && (contractForm.get('endDate').dirty || 
               contractForm.get('endDate').touched)" class="alert alert-danger">
-            Please provide a valid end Date.
+              <div *ngIf="contractForm.get('startDate').value === ''; else validEndDate">
+                Please enter a contract start date first
+              </div>
+              <ng-template #validEndDate>
+                Please provide a valid end date.
+              </ng-template>
           </div>
-          <!-- <div  class="alert alert-danger">Email is required</div> -->
         </div>
       </div>
       <div class="row">
@@ -61,26 +63,26 @@
           <h4>Add room types</h4>
 
           <form #addRommType="ngForm" (ngSubmit)="onAdd(addRommType)" class="form-horizontal row">
-            <div class="col-sm-2">
+            <div class="col">
               <label>Type</label>
               <input type="text" class="form-control" id="type" name="type" placeholder="Enter Type" required ngModel>
             </div>
-            <div class="col-sm-2">
+            <div class="col">
               <label>Capacity</label>
               <input type="text" class="form-control" id="capacity" name="capacity" placeholder="Enter Capacity"
                 required ngModel min="1">
             </div>
-            <div class="col-sm-2 ml-2">
+            <div class="col">
               <label>Price</label>
               <input type="number" class="form-control" id="price" name="price" placeholder="Enter Price" required
                 ngModel min="0">
             </div>
-            <div class="col-sm-2 ml-2 mr-4">
+            <div class="col">
               <label>Room Count</label>
               <input type="number" class="form-control" id="roomCount" name="roomCount" placeholder="Enter Type"
                 required ngModel min="1">
             </div>
-            <div class="col-sm-1" style="margin-top: 24px;">
+            <div class="col-sm-2" style="margin-top: 29px;">
               <button class="btn btn-primary mb-2 mt-6" type="submit" [disabled]="addRommType.invalid">Add Room
                 Type</button>
             </div>
@@ -98,11 +100,13 @@
             </thead>
             <tbody>
               <tr class="form-group" *ngFor="let type of roomTypeList; let i = index;">
-                <td>{{type.type}}</td>
-                <td>{{type.capacity}}</td>
-                <td>{{type.price}}</td>
-                <td>{{type.roomCount}}</td>
-                <td><button class="btn btn-secondary" type="button" (click)="deleteControl(i)">Delete</button></td>
+                <td *ngIf="type.status != 'DELETED'">{{type.type}}</td>
+                <td *ngIf="type.status != 'DELETED'">{{type.capacity}}</td>
+                <td *ngIf="type.status != 'DELETED'">{{type.price}}</td>
+                <td *ngIf="type.status != 'DELETED'">{{type.roomCount}}</td>
+                <td *ngIf="type.status != 'DELETED'">
+                  <button class="btn btn-secondary" type="button" (click)="deleteContract(i, type)">Delete</button>
+                </td>
                 <div class="alert alert-danger" *ngIf="type.invalid 
                               && type.touched">
                   Please enter value
@@ -114,74 +118,9 @@
       </div>
 
       <br>
-      <button type="submit" [disabled]="!contractForm.valid || roomTypeList.length <= 0" class="btn btn-info"
-        (click)="onSubmit()">Create Contract</button>
+      <button type="submit" [disabled]="!contractForm.valid || roomTypeList.length <= 0" class="btn btn-info float-right"
+        (click)="onSubmit()">{{isUpdate ? "Update" : "Create"}} Contract</button>
     </form>
   </div>
 
-  <!-- The Modal -->
-  <ng-template #myModal>
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Create Hotel</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-
-        <!-- Modal body -->
-        <form [formGroup]="hotelForm">
-        <div class="modal-body">
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="markup">Name</label>
-              <input type="text" formControlName="name" class="form-control" id="name" name="name"
-                placeholder="Enter a hotel name" required>
-              <div *ngIf="hotelForm.get('name').invalid && submitted" class="alert alert-danger">
-                Please enter a hotel Name
-              </div>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="markup">Location</label>
-              <input type="text" formControlName="location" class="form-control" id="location" name="location"
-                placeholder="Enter location details" required>
-              <div *ngIf="hotelForm.get('location').invalid && submitted" class="alert alert-danger">
-                Please enter a location
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="markup">Hotel Contact Number</label>
-              <input type="text" formControlName="contactNumber" class="form-control" id="contactNumber"
-                name="contactNumber" placeholder="Enter location details" required>
-              <div *ngIf="hotelForm.get('contactNumber').invalid && submitted" class="alert alert-danger">
-                Please enter a location
-              </div>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="markup">Contact Person Name</label>
-              <input type="text" formControlName="contactName" class="form-control" id="contactName" name="contactName"
-                placeholder="Enter location details" required>
-              <div *ngIf="hotelForm.get('contactName').invalid && submitted" class="alert alert-danger">
-                Please enter a location
-              </div>
-            </div>
-          </div>
-          <div class="alert alert-success" role="alert" *ngIf="submit">
-            This is a success alert—check it out!
-          </div>
-        </div>
-
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="submit" [disabled]="!hotelForm.valid" class="btn btn-info"
-            (click)="onSubmitHotel()">Create</button>
-          <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </ng-template>
 </div>

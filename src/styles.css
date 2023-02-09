@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+/* .mat-mdc-snack-bar-label, .mdc-snackbar__surface {
+    background-color: aliceblue;
+} */
+
+/* .notif-success{
+    background-color: aliceblue;
+} */
+@import "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"

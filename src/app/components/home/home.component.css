@@ -1,9 +1,37 @@
-/* input{
-    margin-right: 200px;
-    margin-left: 30px;
-    width: 150px;
+table.table-bordered tbody tr td,
+table.table-bordered thead tr th {
+  height: 30px;
+  padding: 5px;
 }
 
-button{
-    margin-right: 10px;
-} */
+#create-button {
+  margin-top: -25px; 
+  margin-bottom: 10px;
+}
+
+#clear-btn {
+  margin-right: -11px; 
+  float: right;
+}
+
+#filter-btn {
+  margin-right: 10px; 
+  float: right;
+}
+
+#btn-update {
+  float: right; 
+  margin-left: 5px;
+}
+
+#delete-btn{
+  float: right;
+}
+
+#update-div{
+  margin-bottom: 15px;
+}
+
+tbody{
+  background-color: aliceblue;
+}

@@ -15,8 +15,7 @@ import { CreateReservationComponent } from './components/create-reservation/crea
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateHotelComponent } from './components/create-hotel/create-hotel.component';
-import { CancelReservationComponent } from './components/cancel-reservation/cancel-reservation.component';
-import { PopupModalComponent } from './components/popup-modal/popup-modal.component';
+import { DeleteContractComponent } from './components/delete-contract/delete-contract.component';
 
 @NgModule({
   declarations: [
@@ -27,8 +26,7 @@ import { PopupModalComponent } from './components/popup-modal/popup-modal.compon
     SearchReservationComponent,
     CreateReservationComponent,
     CreateHotelComponent,
-    CancelReservationComponent,
-    PopupModalComponent
+    DeleteContractComponent
   ],
   imports: [
     BrowserModule,

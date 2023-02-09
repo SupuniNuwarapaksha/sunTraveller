@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PopupModalComponent } from './popup-modal.component';
+import { DeleteContractComponent } from './delete-contract.component';
 
-describe('PopupModalComponent', () => {
-  let component: PopupModalComponent;
-  let fixture: ComponentFixture<PopupModalComponent>;
+describe('DeleteContractComponent', () => {
+  let component: DeleteContractComponent;
+  let fixture: ComponentFixture<DeleteContractComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PopupModalComponent ]
+      declarations: [ DeleteContractComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PopupModalComponent);
+    fixture = TestBed.createComponent(DeleteContractComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

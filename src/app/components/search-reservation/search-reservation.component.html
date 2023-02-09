@@ -1,46 +1,82 @@
-<div class="card my-5">
-    <div class="card-body">
-      <form (ngSubmit)="onSubmit()" [formGroup]="reservationSearchForm">
-        <div class="form-group">
-          <label for="checkInDate">Start Date</label>
-          <input type="date" formControlName="checkInDate"
-            class="form-control" 
-            id="checkInDate" 
-            name="checkInDate" 
-            required >
-        </div>
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <form (ngSubmit)="onSubmit()" [formGroup]="reservationSearchForm">
+          <div class="row">
+            <div class="form-group col">
+              <label for="checkInDate">Start Date</label>
+              <input
+                type="date"
+                formControlName="checkInDate"
+                class="form-control"
+                id="checkInDate"
+                name="checkInDate"
+                [min]="now"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-            <label for="numberOfNights">No of Nights</label>
-            <input type="number" formControlName="numberOfNights"
-              class="form-control" 
-              id="numberOfNights" 
-              name="numberOfNights" 
-              required min="1">
+            <div class="form-group col">
+              <label for="numberOfNights">No of Nights</label>
+              <input
+                type="number"
+                formControlName="numberOfNights"
+                class="form-control"
+                id="numberOfNights"
+                name="numberOfNights"
+                required
+                min="1"
+              />
+            </div>
           </div>
 
           <div formArrayName="roomCount">
-            <div>
-            </div>
+            <div></div>
             <h4>Add Room Details</h4>
 
-            <form #addRommType="ngForm" (ngSubmit)="onAdd(addRommType)" class="form-horizontal row gx-5">
-              <div class="col-sm-2 ml-2">
+            <form
+              #addRommType="ngForm"
+              (ngSubmit)="onAdd(addRommType)"
+              class="form-horizontal row gx-5"
+            >
+              <div class="col">
                 <label>No of Adults</label>
-                <input type="number" class="form-control" id="numberOfAdults" name="numberOfAdults"
-                  required ngModel min="1">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="numberOfAdults"
+                  name="numberOfAdults"
+                  required
+                  ngModel
+                  min="1"
+                />
               </div>
-              <div class="col-sm-2 ml-2">
+              <div class="col">
                 <label>No of Rooms</label>
-                <input type="number" class="form-control" id="numberOfBeds" name="numberOfBeds"
-                  required ngModel min="1">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="numberOfBeds"
+                  name="numberOfBeds"
+                  required
+                  ngModel
+                  min="1"
+                />
               </div>
-              <div class="col-sm-1" style="margin-top: 24px;">
-                <button class="btn btn-primary mb-2 mt-6" type="submit" [disabled]="addRommType.invalid">Add Room Details</button>
+              <div class="col" style="margin-top: 29px">
+                <button
+                  class="btn btn-primary mb-2 mt-6 float-right"
+                  type="submit"
+                  [disabled]="addRommType.invalid"
+                >
+                  Add Room Details
+                </button>
               </div>
             </form>
 
-            <table class="table table-striped mt-4 w-75">
+            <table class="table table-striped mt-4">
               <thead>
                 <tr>
                   <th>No of Adults</th>
@@ -49,55 +85,101 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="form-group" *ngFor="let room of roomTypeList; let i = index;">
-                  <td>{{room.numberOfAdults}}</td>
-                  <td>{{room.numberOfBeds}}</td>
-                  <td><button class="btn btn-secondary" type="button" (click)="deleteControl(i)">Delete</button></td>
-                  <div class="alert alert-danger" *ngIf="room.invalid 
-                              && room.touched">
+                <tr
+                  class="form-group"
+                  *ngFor="let room of roomTypeList; let i = index"
+                >
+                  <td>{{ room.numberOfAdults }}</td>
+                  <td>{{ room.numberOfBeds }}</td>
+                  <td>
+                    <button
+                      class="btn btn-secondary"
+                      type="button"
+                      (click)="deleteControl(i)"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                  <div
+                    class="alert alert-danger"
+                    *ngIf="room.invalid && room.touched"
+                  >
                     Please enter value
                   </div>
                 </tr>
               </tbody>
             </table>
           </div>
-        <button type="submit"  [disabled]="!reservationSearchForm.valid"
-          class="btn btn-info">Submit</button>
-      </form>
-    </div>
-  </div>
-  
-  <div class="container-fluid bg-3 text-center">    
-    <div class="row">
-
-      <div class="col-sm-3" *ngFor="let contract of availableContracts; let i = index">
-        <div class="card my-5">
-            <div class="card-body">
-              <h4>Hotel: {{ contract?.hotel?.name}}</h4>
-              <h5>Available Rooms</h5>
-              <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                  <tr>
-                    <th scope="col">Room Type</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">No of Available Rooms</th>
-                    <th scope="col">Max Adults</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let roomType of contract.roomTypes">
-                    <td>{{roomType.type}}</td>
-                    <td>{{roomType.price}}</td>
-                    <td>{{roomType.remainingNumberOfRooms}}</td>
-                    <td>{{roomType.capacity}}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <h5>{{contract.minimumPrice}}</h5>
-              <button class="btn btn-dark" (click)="openDialog(contract)">Submit</button>
-            </div>
-          </div>
+          <button
+            type="submit"
+            [disabled]="!reservationSearchForm.valid || roomTypeList.length < 1"
+            class="btn btn-info float-right"
+          >
+            Search Availability
+          </button>
+        </form>
       </div>
     </div>
   </div>
+  <div class="col-3"></div>
+</div>
 
+<nav aria-label="Page navigation example justify-content-end">
+  <ul class="pagination justify-content-end">
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Previous" (click)="previous()">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    <li class="page-item" *ngFor="let number of numbers">
+      <a class="page-link" (click)="nextPage(number)">{{ number }}</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next" (click)="next()">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+<div class="row">
+  <div class="col-1"></div>
+  <div class="col"><div
+    class="card text-white bg-dark"
+    *ngFor="let contract of availableContracts"
+    style="margin-bottom: 15px;"
+  >
+    <div class="card-body">
+      <div class="row">
+        <div class="col-3">
+          <img src="../../../assets/room2.jpg" width="200" height="200" />
+        </div>
+        <div class="col">
+          <h2 class="card-title" style="color: aqua">
+            {{ contract?.hotel?.name }}
+          </h2>
+          <h3 style="font-family: Candara">{{ contract?.hotel?.location }}</h3>
+          <h6 >Contact:  {{ contract?.hotel?.contactNumber }} ({{contract?.hotel?.contactName}})</h6>
+          <dl>
+            <dt
+              *ngFor="let roomType of contract.roomTypes"
+              style="font-family: Candara"
+            >
+              {{ roomType.type }} * {{ roomType.requestedNumberOfRooms }}
+            </dt>
+          </dl>
+          <p style="font-family: Candara">
+            {{ reservationSearchForm.get("numberOfNights").value }} nights
+          </p>
+        </div>
+        <div class="col-3" style="text-align: justify;">
+          <h1>LKR {{ contract.calculatedPrice | number: '1.2-2' }}</h1>
+          <p>taxes and charges included</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <div class="col-1"></div>
+  
+</div>
